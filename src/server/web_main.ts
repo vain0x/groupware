@@ -22,7 +22,17 @@ export const newWebRouter = (): express.Router => {
     "/static/*",
   ], staticFileHandler, notFoundHandler)
 
-  router.get("/", (req, res) => res.status(200).send(renderMainHtmlToString("index")).end())
+  router.get([
+    "/",
+    "/login/",
+  ], (req, res) => {
+    res.status(200).send(renderMainHtmlToString("index", {
+      renderPoint: { pathname: req.path as any },
+    })).end()
+  })
+  router.post("/login/", (_req, res) => {
+    res.redirect("/")
+  })
 
   // router.all("*", (req, res) => {
   //   console.error("unimplemented", req.url)

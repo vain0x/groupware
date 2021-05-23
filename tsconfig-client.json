@@ -8,5 +8,8 @@
         ],
         "module": "ES2015",
         "target": "ES2017"
-    }
+    },
+    "exclude": [
+        "src/server/**/*.ts"
+    ]
 }
