@@ -26,7 +26,7 @@ export const newWebRouter = (): express.Router => {
     "/",
     "/login/",
   ], (req, res) => {
-    res.status(200).send(renderMainHtmlToString("index", {
+    res.status(200).send(renderMainHtmlToString("groupware", {
       renderPoint: { pathname: req.path as any },
     })).end()
   })

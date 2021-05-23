@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react"
 import { never } from "../util/never"
+import { CalendarPage } from "./calendar_page"
 
 interface RouteObject {
   href: string
@@ -24,8 +25,6 @@ export type RenderPoint =
   } | {
     pathname: "/login/"
   })
-
-const Root = () => (<div>Hello, world!</div>)
 
 const LoginPage = () => {
   return (
@@ -56,7 +55,7 @@ const LoginPage = () => {
 const fromRenderPoint = (endpoint: RenderPoint): ReactNode => {
   switch (endpoint.pathname) {
     case "/":
-      return (<Root />)
+      return (<CalendarPage />)
 
     case "/login/":
       return (<LoginPage />)

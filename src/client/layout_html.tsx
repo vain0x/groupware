@@ -37,7 +37,7 @@ export const renderMainHtmlToString = (title: string, props: MainProps) =>
     <Html
       title={title}
       head={(
-        <script id="main-props-script" data-json={JSON.stringify(props.renderPoint)} />
+        <script id="main-props-script" data-json={JSON.stringify(props)} />
       )}>
       <Main {...props} />
     </Html>
