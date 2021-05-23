@@ -1,0 +1,40 @@
+import React, { ReactNode } from "react"
+import { renderToString } from "react-dom/server"
+
+interface HtmlProps {
+  title: string
+  head: ReactNode
+  children: ReactNode
+}
+
+const Html = ({ title, head, children }: HtmlProps) => (
+  <html lang="ja">
+    <head>
+      <meta charSet="utf-8" />
+      <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+      <title>{title}</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" integrity="sha256-oSrCnRYXvHG31SBifqP2PM1uje7SJUyX0nTwO2RJV54=" crossOrigin="anonymous" />
+      <link rel="stylesheet" type="text/css" media="screen" href="/static/layout.css" />
+      <link rel="stylesheet" type="text/css" media="screen" href="/static/theme.css" />
+      <script src="https://unpkg.com/react@17.0.2/umd/react.development.js" crossOrigin="anonymous" />
+      <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossOrigin="anonymous" />
+      {head}
+    </head>
+
+    <body>
+      {children}
+    </body>
+  </html>
+)
+
+export const renderHtmlToString = (props: HtmlProps) =>
+  `<!DOCTYPE html>\n${renderToString(<Html {...props} />)}`
+
+export const AppHead = () => (
+  <script src="/static/bundle.js" defer />
+)
+
+export const AppBody = () => (
+  <article id="app-container" />
+)
