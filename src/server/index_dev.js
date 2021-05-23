@@ -10,7 +10,7 @@ const path = require("path")
 const newWebRouter = () => require("../../target/server/web_main").newWebRouter()
 const newWebServer = (...args) => require("../../target/server/web_main").newWebServer(...args)
 
-const WATCHED_DIR = path.resolve(__dirname, "../target")
+const WATCHED_DIR = path.resolve(__dirname, "../../target")
 
 // ===============================================
 
@@ -39,7 +39,7 @@ const main = async () => {
 
     let router = null
     const server = newWebServer({
-      getRouter: () => router ?? (router = newWebRouter()),
+      getRouter: () => router ?? (console.log("index_dev: reloaded"), router = newWebRouter()),
     })
     const dispose = server.start()
     defer(dispose)

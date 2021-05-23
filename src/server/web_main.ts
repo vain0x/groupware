@@ -4,6 +4,9 @@ import express from "express"
 import morgan from "morgan"
 import path from "path"
 import helmet from "helmet"
+import http from "http"
+import ws from "ws"
+import { renderMainHtmlToString } from "../client/layout_html"
 
 const DIST_DIR = path.resolve(__dirname, "../../dist")
 
@@ -16,13 +19,15 @@ export const newWebRouter = (): express.Router => {
   const staticFileHandler = express.static(DIST_DIR)
   router.get([
     "favicon.ico",
-    "/static/*"
+    "/static/*",
   ], staticFileHandler, notFoundHandler)
 
-  router.all("*", (req, res) => {
-    console.error("unimplemented")
-    res.send(req.url)
-  })
+  router.get("/", (req, res) => res.status(200).send(renderMainHtmlToString("index")).end())
+
+  // router.all("*", (req, res) => {
+  //   console.error("unimplemented", req.url)
+  //   res.send(req.url)
+  // })
 
   return router
 }
@@ -51,10 +56,33 @@ export const newWebServer = (host: { getRouter(): express.Router }) => {
 
   return {
     start: () => {
-      const server = app.listen(port, () => {
+      const server = http.createServer(app)
+
+      const wss = new ws.Server({ server })
+      wss.on("error", err => console.error("wss error:", err))
+
+      wss.on('connection', function connection(ws) {
+        console.log("wss connection")
+
+        ws.on('message', function incoming(message) {
+          console.log('received: %s', message)
+        })
+
+        ws.send('something')
+
+        ws.on('close', function () {
+          console.log('closed')
+        })
+      })
+
+      server.listen(port, () => {
         console.log(`info: HTTP server is ready. Visit ${origin} .`)
       })
-      return () => server.close()
-    }
+
+      return () => {
+        wss.close()
+        server.close()
+      }
+    },
   }
 }

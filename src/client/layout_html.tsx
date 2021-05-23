@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react"
 import { renderToString } from "react-dom/server"
+import { Main } from "./main"
 
 interface HtmlProps {
   title: string
@@ -23,7 +24,9 @@ const Html = ({ title, head, children }: HtmlProps) => (
     </head>
 
     <body>
-      {children}
+      <article id="app-container">
+        {children}
+      </article>
     </body>
   </html>
 )
@@ -31,10 +34,9 @@ const Html = ({ title, head, children }: HtmlProps) => (
 export const renderHtmlToString = (props: HtmlProps) =>
   `<!DOCTYPE html>\n${renderToString(<Html {...props} />)}`
 
+export const renderMainHtmlToString = (title: string) =>
+  `<!DOCTYPE html>\n${renderToString(<Html title={title} head={<AppHead />} children={<Main />} />)}`
+
 export const AppHead = () => (
   <script src="/static/bundle.js" defer />
-)
-
-export const AppBody = () => (
-  <article id="app-container" />
 )

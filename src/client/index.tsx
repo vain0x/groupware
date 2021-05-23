@@ -1,11 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
-
-const Main = () => (
-  <article>
-    Hello, world!
-  </article>
-)
+import { Main } from "./main"
 
 export const main = () => {
   const appContainerElement = document.getElementById("app-container") as HTMLElement

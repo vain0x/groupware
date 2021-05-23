@@ -9,8 +9,8 @@
     "tsc-build": "tsc -b",
     "tsc-watch": "tsc --watch",
     "webpack-build": "webpack --mode production",
-    "webpack-watch": "webpack --mode development",
-    "dev": "run-p server-watch tsc-watch webpack-watch",
+    "webpack-watch": "webpack --mode development --watch",
+    "dev": "npm run build; run-p server-watch tsc-watch webpack-watch",
     "build": "run-p tsc-build webpack-build",
     "start": "npm run server-run"
   },
@@ -39,6 +39,7 @@
     "@types/multer": "^1.4.5",
     "@types/react": "^17.0.6",
     "@types/react-dom": "^17.0.5",
+    "@types/ws": "^7.4.4",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "cookie-session": "^1.4.0",
@@ -48,6 +49,7 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "ws": "^7.4.5"
   }
 }
