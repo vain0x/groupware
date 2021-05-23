@@ -1,0 +1,17 @@
+# data structure
+
+field user_id: string = identity
+data users(user_id) {
+    display_name: string
+}
+
+field schedule_id: string = identity
+data schedules(schedule_id, user_id, date: date) {
+    text: string
+}
+
+query search_users(user_id) {
+    users(user_id) {
+        display_name
+    }
+}

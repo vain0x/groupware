@@ -1,0 +1,81 @@
+# try online: https://pegjs.org/online
+
+root = __ stmts:(it:stmt __ { return it })*
+    { return stmts }
+
+# ------------------------------------------------
+# 字句
+# ------------------------------------------------
+
+# 識別子
+ident = $ ([_A-Za-z] [_0-9A-Za-z]*)
+
+comment
+  = $ ("#" [^\r\n]*)
+    { return undefined }
+
+# 改行でない空白
+_ "blank"
+  = $ ([ \t]* comment?)
+    { return undefined }
+
+# 改行を含む空白
+__ "space"
+  = $ ([ \t\r\n]* (comment [ \t\r\n]*)*)
+    { return undefined }
+
+# ------------------------------------------------
+# 型
+# ------------------------------------------------
+
+ty
+  = name:ident
+    { return ["nameTy", name] }
+
+# 型注釈
+tyAsc
+  = ":" _ ty:ty
+    { return ty }
+
+# ------------------------------------------------
+# 文
+# ------------------------------------------------
+
+param
+  = name:ident _ ty:(tyAsc?)
+  { return ["param", name, ty] }
+
+paramList
+  = "(" __
+      head:param _
+      tail:("," __ it:param _ { return it })*
+      ","? __
+    ")"
+    { return ["paramList", [head, ...tail]] }
+  / "(" __ ")"
+    { return ["paramList", []] }
+
+field
+  = (
+    name:ident _ keys:paramList _ body:fieldList
+    { return ["field", name, keys, body] }
+  )
+  / param
+
+fieldList
+  = "{" __
+      head:field _
+      tail:("," __ it:field _ { return it })*
+      ","? __
+    "}"
+    { return ["fieldList", [head, ...tail]] }
+  / "{" __ "}"
+    { return ["fieldList", []] }
+
+stmt
+  = "field" _ name:ident _ ty:tyAsc _ "=" __ value:ident
+    { return ["fieldStmt", name, ty, value] }
+  / "data" _ name:ident _ keys:paramList _ body:fieldList
+    { return ["dataStmt", name, keys, body] }
+  / "query" _ name:ident _ keys:paramList _ body:fieldList
+    { return ["queryStmt", name, keys, body] }
