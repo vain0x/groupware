@@ -1,6 +1,10 @@
 import React from "react"
 
-interface CalendarProps {
+interface Query {
+  deps: string[]
+}
+
+interface CalendarData {
   // date -> schedule[]
   schedules: [string, string[]]
 }
@@ -12,7 +16,23 @@ export interface QuerySender {
 export const SenderContext = React.createContext<QuerySender>(null!)
 export const useSender = () => React.useContext(SenderContext)
 
-export const CalendarPage = () => {
+interface AppEvent {
+  kind: string
+}
+
+export type DisposeFn = () => void
+
+export interface AppEventListener {
+  listen(kind: string[], callback: (event: AppEvent) => void): DisposeFn
+}
+
+export const AppEventListenerContext = React.createContext<AppEventListener>(null!)
+export const useAppEventListener = () => React.useContext(AppEventListenerContext)
+
+export const CalendarPage: React.VFC<{
+  query: Query
+  data: CalendarData
+}> = props => {
   // schedulesをpropsから受け取る
   // 元となったクエリを購読してschedulesの変化を受け取る
 
